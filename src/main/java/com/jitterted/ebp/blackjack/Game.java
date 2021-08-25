@@ -56,8 +56,6 @@ public class Game {
         dealerHand.drawCardFrom(deck);
     }
 
-    // TODO: duplicate?
-
     public void play() {
         boolean playerBusted = playerTurn();
         dealerTurn(playerBusted);
@@ -68,32 +66,24 @@ public class Game {
     private void determineOutcome(boolean playerBusted) {
         if (playerBusted) {
             System.out.println("You Busted, so you lose.  💸");
-        } else if (isDealerHandBusted()) {
+        } else if (dealerHand.isBusted()) {
             System.out.println("Dealer went BUST, Player wins! Yay for you!! 💵");
-        } else if (dealerHand.value() < playerHand.value()) {
+        } else if (playerHand.beats(dealerHand)) {
             System.out.println("You beat the Dealer! 💵");
-        } else if (dealerHand.value() == playerHand.value()) {
+        } else if (dealerHand.pushes(playerHand)) {
             System.out.println("Push: You tie with the Dealer. 💸");
         } else {
             System.out.println("You lost to the Dealer. 💸");
         }
     }
 
-    private boolean isDealerHandBusted() {
-        return dealerHand.value() > 21;
-    }
-
     private void dealerTurn(boolean playerBusted) {
         // Dealer makes its choice automatically based on a simple heuristic (<=16, hit, 17>=stand)
         if (!playerBusted) {
-            while (shouldDealerHit()) {
+            while (dealerHand.shouldDealerHit()) {
                 dealerHand.drawCardFrom(deck);
             }
         }
-    }
-
-    private boolean shouldDealerHit() {
-        return dealerHand.value() <= 16;
     }
 
     private boolean playerTurn() {
@@ -118,7 +108,7 @@ public class Game {
     }
 
     private boolean isPlayerBusted() {
-        return playerHand.value() > 21;
+        return playerHand.isBusted();
     }
 
     private boolean playerChoosesHit(String playerChoice) {
