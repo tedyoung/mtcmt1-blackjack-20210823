@@ -28,4 +28,33 @@ public class WalletTest {
                 .isFalse();
     }
 
+    @Test
+    public void newWalletHasZeroBalance() throws Exception {
+        Wallet wallet = new Wallet();
+
+        assertThat(wallet.balance())
+                .isZero();
+    }
+
+    @Test
+    public void newWalletAdd8ThenBalanceIs8() throws Exception {
+        Wallet wallet = new Wallet();
+
+        wallet.addMoney(8);
+
+        assertThat(wallet.balance())
+                .isEqualTo(8);
+    }
+
+    @Test
+    public void newWalletAdd17AndAdd18HasBalanceOf35() throws Exception {
+        Wallet wallet = new Wallet();
+
+        wallet.addMoney(17);
+        wallet.addMoney(18);
+
+        assertThat(wallet.balance())
+                .isEqualTo(17 + 18);
+    }
+
 }
